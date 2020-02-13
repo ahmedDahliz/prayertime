@@ -2,6 +2,10 @@ const electron = require('electron')
 const app = electron.app
 const path = require('path')
 const isDev = require('electron-is-dev')
+var fs = require('fs');
+const { ipcMain } = require('electron')
+const editJsonFile = require("edit-json-file");
+
 const BrowserWindow = electron.BrowserWindow
 
 let mainWindow
@@ -38,4 +42,12 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+ipcMain.on('update-data', (event, arg) => {
+  console.log(arg)
+  let file = editJsonFile('src/Data.json');
+  
+  file.save();
+  event.reply('asynchronous-reply', 'pong')
 })

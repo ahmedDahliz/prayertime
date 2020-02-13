@@ -1,0 +1,85 @@
+div.infos {
+  margin: 15px
+}
+
+h3.info span {
+  font-size: 30px;
+}
+
+div.clear {
+  clear: both;
+}
+input[type=text]:not(.browser-default):focus:not([readonly]),{
+  border-bottom: 1px solid #bf360c !important;
+  box-shadow: 0 1px 0 0 #bf360c !important;
+}
+.mt-3 {
+    margin-bottom: 33px !important;
+}
+.md-modal{
+  z-index:3;
+  display: block;
+  padding-top:100px;position:fixed;
+  left:0;top:0;width:100%;height:100%;
+  overflow:auto;
+  background-color:rgb(0,0,0);background-color:rgba(0,0,0,0.4)
+}
+
+.modal-content{
+  margin:auto;background-color:#fff;
+  position:relative;padding:0;outline:0;width:600px
+}
+.md-container:after, .md-container:before, .md-container{
+  padding:0.01em 16px
+}
+.display-topright{
+  position:absolute;right:0;top:0
+}
+.button{
+  border:none;
+  display:inline-block;
+  padding:8px 16px;
+  vertical-align:middle;
+  overflow:hidden;
+  text-decoration:none;
+  color:inherit;
+  background-color:inherit;
+  text-align:center;
+  cursor:pointer;
+  white-space:nowrap
+}
+
+.button:hover{
+  color:#000!important;
+  background-color:#ccc!important
+}
+.teal, .hover-teal:hover{
+  color:#fff!important;
+  background-color:#009688!important
+}
+
+@media (max-width:600px){
+  .modal-content{
+    margin:0 10px;width:auto!important
+  }
+  .modal{padding-top:30px}
+}
+.display-topright{
+  position:absolute;right:0;top:0
+}
+@media (max-width:768px){
+  .modal-content{width:500px}
+  .modal{padding-top:50px}
+}
+@media (min-width:993px){
+  .modal-content{width:900px}
+}
+
+
+
+
+
+
+
+
+/*------------------------*/
