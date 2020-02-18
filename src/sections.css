@@ -75,9 +75,11 @@ input[type=text]:not(.browser-default):focus:not([readonly]),{
   .modal-content{width:900px}
 }
 
-
-
-
+.bold {
+  font-weight: bold;
+  font-size: 15px;
+  color: black
+}
 
 
 

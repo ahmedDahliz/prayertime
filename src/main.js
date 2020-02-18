@@ -5,7 +5,7 @@ const isDev = require('electron-is-dev')
 var fs = require('fs');
 const { ipcMain } = require('electron')
 const editJsonFile = require("edit-json-file");
-
+const request = require('request');
 const BrowserWindow = electron.BrowserWindow
 
 let mainWindow
@@ -44,10 +44,31 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.on('update-data', (event, arg) => {
-  console.log(arg)
+ipcMain.on('location-data', (event, arg) => {
   let file = editJsonFile('src/Data.json');
-  
-  file.save();
-  event.reply('asynchronous-reply', 'pong')
+  console.log(arg);
+  file.set('country', arg.country)
+  file.set('city', arg.city)
+  file.save()
+  event.returnValue = file.toObject()
+//   request("http://api.aladhan.com/v1/timingsByCity?city="+arg+"&country=Morocco&method=3", {json: true}, (error, res, data) => {
+//     if (error) {
+//         event.reply('error-data', {error: error})
+//         return;
+//     }
+//     if (!error && res.statusCode == 200) {
+//       console.log(data);
+//
+//       // if (body.title === null) {
+//       //   console.log('wwwwww');
+//       //   event.reply('error-data', "error lod")
+//       // }else {
+//       //
+//       //
+//       // }
+//     };
+// });
+
+
+
 })
