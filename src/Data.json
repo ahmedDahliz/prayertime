@@ -1,4 +1,15 @@
 {
   "country": "Morocco",
-  "city": "Marrakech"
+  "city": "Marrakech",
+  "timings": {
+    "Fajr": "06:49",
+    "Sunrise": "08:11",
+    "Dhuhr": "13:46",
+    "Asr": "16:56",
+    "Sunset": "19:22",
+    "Maghrib": "19:22",
+    "Isha": "20:39",
+    "Imsak": "06:39",
+    "Midnight": "01:46"
+  }
 }

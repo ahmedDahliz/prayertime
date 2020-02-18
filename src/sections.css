@@ -81,6 +81,11 @@ input[type=text]:not(.browser-default):focus:not([readonly]),{
   color: black
 }
 
+.small-info {
+    font-size: 11px;
+    font-family: fantasy;
+    font-style: italic;
+}
 
 
 

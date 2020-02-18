@@ -6,6 +6,7 @@ var fs = require('fs');
 const { ipcMain } = require('electron')
 const editJsonFile = require("edit-json-file");
 const request = require('request');
+const file = editJsonFile('src/Data.json');
 const BrowserWindow = electron.BrowserWindow
 
 let mainWindow
@@ -44,31 +45,49 @@ app.on('activate', () => {
   }
 })
 
-ipcMain.on('location-data', (event, arg) => {
-  let file = editJsonFile('src/Data.json');
-  console.log(arg);
-  file.set('country', arg.country)
-  file.set('city', arg.city)
-  file.save()
-  event.returnValue = file.toObject()
-//   request("http://api.aladhan.com/v1/timingsByCity?city="+arg+"&country=Morocco&method=3", {json: true}, (error, res, data) => {
-//     if (error) {
-//         event.reply('error-data', {error: error})
-//         return;
-//     }
-//     if (!error && res.statusCode == 200) {
-//       console.log(data);
-//
-//       // if (body.title === null) {
-//       //   console.log('wwwwww');
-//       //   event.reply('error-data', "error lod")
-//       // }else {
-//       //
-//       //
-//       // }
-//     };
-// });
+ipcMain.on('timing-data', (event, args) => {
+  // ipcMain.send('error-data', "wa errooooooor")
+  console.log(args);
+  request("http://api.aladhan.com/v1/timingsByCity?city="+args.city+"&country="+args.country+"&method=3", {json: true}, (error, res, data) => {
+    if (error) {
+        ipcMain.send('error-data', {error: error})
+        return;
+    }
+    if (!error && res.statusCode == 200) {
+      if (data.code == 200 && data.status == "OK") {
+        console.log(data);
+        file.set('country', args.country)
+        file.set('city', args.city)
+        file.set('timings', data.data.timings)
+        file.save()
+        event.returnValue = {locationData : file.toObject(), timingData: data}
+      }else {
+          ipcMain.send('error-data', {error: error})
+          return;
+      }
 
-
-
+    };
+});
 })
+//Refresh timing at midnight
+ipcMain.on('refresh-timing', (event, args) => {
+  console.log(args);
+  request("http://api.aladhan.com/v1/timingsByCity?city="+args.city+"&country="+args.country+"&method=3", {json: true}, (error, res, data) => {
+    if (error) {
+        ipcMain.send('error-data', {error: error})
+        return;
+    }
+    if (!error && res.statusCode == 200) {
+      if (data.code == 200 && data.status == "OK") {
+        console.log(data);
+        file.set('timings', data.data.timings)
+        file.save()
+        event.returnValue = data
+      }else {
+          ipcMain.send('error-data', {error: error})
+          return;
+      }
+
+    };
+  });
+});
