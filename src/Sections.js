@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import section from './sections.css'
 import file from './Data.json'
+import $ from 'jquery'
 const { ipcRenderer } = window.require('electron')
 
 //    <span className="button display-topright">&times;</span>
@@ -13,12 +14,13 @@ const { ipcRenderer } = window.require('electron')
 class ConfigModal extends Component {
 
    //Handel the submit click of configuration Modal
-  submitCity(country, city){
-    let data = ipcRenderer.sendSync('timing-data', {"country": country, "city": city});
+  submitCity(country, city, method){
+    let data = ipcRenderer.sendSync('timing-data', {"country": country, "city": city, "method": method});
     //fill inforamtion section
     document.getElementById('country').innerHTML = data.locationData.country
     document.getElementById('city').innerHTML = data.locationData.city
-    document.getElementById('configModal').style.display = "none"
+    // document.getElementById('configModal').style.display = "none"
+    $.hide($('div#configModal'))
     //fill timing table
     document.getElementById('fajr').innerHTML = data.timingData.data.timings.Fajr
     document.getElementById('sunrise').innerHTML = data.timingData.data.timings.Sunrise
@@ -26,6 +28,7 @@ class ConfigModal extends Component {
     document.getElementById('asr').innerHTML = data.timingData.data.timings.Asr
     document.getElementById('maghrib').innerHTML = data.timingData.data.timings.Maghrib
     document.getElementById('isha').innerHTML = data.timingData.data.timings.Isha
+    document.getElementById('methodName').innerHTML = data.timingData.data.meta.method.name
   }
 
   render (){
@@ -34,7 +37,7 @@ class ConfigModal extends Component {
         <div className="modal-content">
           <header className="md-container teal deep-orange darken-4">
 
-            <h2>Configuration</h2>
+            <h2>Settings</h2>
           </header>
 
           <div className="md-container">
@@ -46,7 +49,28 @@ class ConfigModal extends Component {
             <label className="bold">City : </label>
             <input type="text" placeholder="City Name" id="city" name="city" className="mt-3"/>
             </div>
-            <button className="waves-effect waves-light btn mt-3 deep-orange darken-4" onClick={()=> this.submitCity(document.getElementById('country').value, document.getElementById('city').value)} name="submitCity" >Submit</button>
+            <div>
+              <label className="bold">Calculation method : </label> <br/>
+              <select id="calculationMethode">
+                <option value="0"  > - Shia Ithna-Ansari   </option>
+                <option value="1"  > - University of Islamic Sciences, Karachi </option>
+                <option value="2"  > - Islamic Society of North America  </option>
+                <option value="3"  selected> - Muslim World League  </option>
+                <option value="4"  > - Umm Al-Qura University, Makkah  </option>
+                <option value="5"  > - Egyptian General Authority of Survey  </option>
+                <option value="7"  > - Institute of Geophysics, University of Tehran </option>
+                <option value="8"  > - Gulf Region </option>
+                <option value="9"  > - Kuwait </option>
+                <option value="10"  > - Qatar </option>
+                <option value="11"  > - Majlis Ugama Islam Singapura, Singapore </option>
+                <option value="12"  > - Union Organization islamic de France </option>
+                <option value="13"  > - Diyanet İşleri Başkanlığı, Turkey </option>
+                <option value="14"  > - Spiritual Administration of Muslims of Russia </option>
+                <option value="99"  > - Custom. See https://aladhan.com/calculation-methods </option>
+              </select>
+            </div>
+            <br/>
+            <button className="waves-effect waves-light btn mt-3 deep-orange darken-4" onClick={()=> this.submitCity(document.getElementById('country').value, document.getElementById('city').value, document.getElementById('calculationMethode').value)} name="submitCity" >Submit</button>
             <span id="err" className="deep-red darken-4"></span>
           </div>
         </div>
@@ -68,7 +92,7 @@ class Informations extends Component{
      })
      //Refresh timing at midnight
      if ( new Date().toLocaleTimeString('en-US', {hour12: true }) === "12:00:00 AM") {
-       let refreshedData = ipcRenderer.sendSync('refresh-timing', {"country": file.country, "city": file.city});
+       let refreshedData = ipcRenderer.sendSync('refresh-timing', {"country": file.country, "city": file.city, "method": file.method});
        //fill refreshed timing table
        document.getElementById('fajr').innerHTML = refreshedData.data.timings.Fajr
        document.getElementById('sunrise').innerHTML = refreshedData.data.timings.Sunrise
@@ -165,7 +189,7 @@ class Timings extends Component {
 		</table>
         </div>
         <div className="card-action">
-        <span className="small-info">Timing by the method of Muslim World League.</span>
+        <span className="small-info">Timing by the method of <span id="methodName">{file.methodName}</span>.</span>
        </div>
       </div>
     </div>

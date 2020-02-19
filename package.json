@@ -10,6 +10,7 @@
     "edit-json-file": "^1.4.0",
     "electron": "^8.0.0",
     "electron-is-dev": "^1.1.0",
+    "jquery": "^3.4.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.1"

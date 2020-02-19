@@ -48,16 +48,19 @@ app.on('activate', () => {
 ipcMain.on('timing-data', (event, args) => {
   // ipcMain.send('error-data', "wa errooooooor")
   console.log(args);
-  request("http://api.aladhan.com/v1/timingsByCity?city="+args.city+"&country="+args.country+"&method=3", {json: true}, (error, res, data) => {
+  request("http://api.aladhan.com/v1/timingsByCity?city="+args.city+"&country="+args.country+"&method="+args.method, {json: true}, (error, res, data) => {
     if (error) {
-        ipcMain.send('error-data', {error: error})
+        console.log(error);
+        // ipcMain.send('error-data', {error: error})
         return;
     }
     if (!error && res.statusCode == 200) {
       if (data.code == 200 && data.status == "OK") {
-        console.log(data);
+        console.log(data.data.meta);
         file.set('country', args.country)
         file.set('city', args.city)
+        file.set('method', args.method)
+        file.set('methodName', data.data.meta.method.name)
         file.set('timings', data.data.timings)
         file.save()
         event.returnValue = {locationData : file.toObject(), timingData: data}
@@ -72,9 +75,10 @@ ipcMain.on('timing-data', (event, args) => {
 //Refresh timing at midnight
 ipcMain.on('refresh-timing', (event, args) => {
   console.log(args);
-  request("http://api.aladhan.com/v1/timingsByCity?city="+args.city+"&country="+args.country+"&method=3", {json: true}, (error, res, data) => {
+  request("http://api.aladhan.com/v1/timingsByCity?city="+args.city+"&country="+args.country+"&method="+args.method, {json: true}, (error, res, data) => {
     if (error) {
-        ipcMain.send('error-data', {error: error})
+      console.log(error);
+        // ipcMain.send('error-data', {error: error})
         return;
     }
     if (!error && res.statusCode == 200) {
