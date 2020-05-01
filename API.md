@@ -1,10 +1,10 @@
-#La liste des routes de MonDevise API
+# La liste des routes de MonDevise API
 
-###Exigence
+### Exigence
 Si 'api-pack' et 'orm-pack' n'est pas installé
 > composer install
 
-###Les routes de l'entité User 
+### Les routes de l'entité User 
 ```
 > GET /api​/users 
 > GET /api​/users​/{id}
